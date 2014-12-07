@@ -13,70 +13,69 @@ public class CommunicationSystem {
 
 	public CommunicationSystem() {
 		// init attributes
-		header="";
-		content="";
-		_ruleEngine.getInstance();
+		header = "";
+		content = "";
+		RuleEngine.getInstance();
 	}
 
 	private void ReceiveInformationFromGear(String str) {
-		Log.d("RuleEngine"," ------------ Message received from gear !! -----------" );
+		Log.d("RuleEngine",
+				" ------------ Message received from gear !! -----------");
 
-		switch (str)
-		{
-		case Constants.battery_Gear_status_NORMAL :
-			Log.d("RuleEngine","Message received "+str );
+		switch (str) {
+		case Constants.battery_Gear_status_NORMAL:
+			Log.d("RuleEngine", "Message received " + str);
 			_ruleEngine.setGearBattery(Constants.battery_Gear_status_NORMAL);
 			break;
-		case Constants.battery_Gear_status_LOW :
-			Log.d("RuleEngine","Message received "+str );
+		case Constants.battery_Gear_status_LOW:
+			Log.d("RuleEngine", "Message received " + str);
 			_ruleEngine.setGearBattery(Constants.battery_Gear_status_LOW);
 			break;
-		case Constants.heartBeat_status_NORMAL :
-			Log.d("RuleEngine","Message received "+str );
+		case Constants.heartBeat_status_NORMAL:
+			Log.d("RuleEngine", "Message received " + str);
 			_ruleEngine.setHeartBeat(Constants.heartBeat_status_NORMAL);
 			break;
 		case Constants.heartBeat_status_HIGH:
-			Log.d("RuleEngine","Message received "+str );
+			Log.d("RuleEngine", "Message received " + str);
 			_ruleEngine.setHeartBeat(Constants.heartBeat_status_HIGH);
 			break;
-		case Constants.heartBeat_status_LOW :
-			Log.d("RuleEngine","Message received "+str );
+		case Constants.heartBeat_status_LOW:
+			Log.d("RuleEngine", "Message received " + str);
 			_ruleEngine.setHeartBeat(Constants.heartBeat_status_LOW);
 			break;
 		default:
-			Log.d("RuleEngine","Message Unknown "+str );
+			Log.d("RuleEngine", "Message Unknown " + str);
 			break;
 		}
 
 	}
 
 	private void sendInformationToGear(String str) {
-		Log.d("RuleEngine","Message sent from Phone to gear: "+str );
+		Log.d("RuleEngine", "Message sent from Phone to gear: " + str);
 	}
 
 	public void tellEmergency_NORMAL() {
-		header="normal";
-		content="";
-		sendInformationToGear(header+";"+content);
+		header = "normal";
+		content = "";
+		sendInformationToGear(header + ";" + content);
 	}
 
 	public void tellEmergency_SEVERE() {
-		header="severe";
-		content="";
-		sendInformationToGear(header+";"+content);
+		header = "severe";
+		content = "";
+		sendInformationToGear(header + ";" + content);
 	}
 
 	public void tellStopReasoning() {
-		header="stop";
-		content="";
-		sendInformationToGear(header+";"+content);
+		header = "stop";
+		content = "";
+		sendInformationToGear(header + ";" + content);
 	}
 
 	public void tellInformatioNToDisplay(String info) {
-		header="information";
-		content=info;
-		sendInformationToGear(header+";"+content);
+		header = "information";
+		content = info;
+		sendInformationToGear(header + ";" + content);
 	}
-
 
 }

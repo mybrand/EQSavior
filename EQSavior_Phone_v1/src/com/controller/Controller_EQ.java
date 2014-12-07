@@ -1,7 +1,5 @@
 package com.controller;
 
-import android.util.Log;
-
 import com.phoneActuatingSystem.PhoneActuatingSystem;
 import com.ruleengine.RuleEngine;
 import com.view.EarthquakeActivity;
@@ -13,7 +11,7 @@ public class Controller_EQ {
 	private PhoneActuatingSystem _phoneActuationSystem;
 
 	public Controller_EQ(EarthquakeActivity earthquakeActivity) {
-		this._myEQ_Activity = earthquakeActivity;	
+		this._myEQ_Activity = earthquakeActivity;
 		this._myRuleEngine = RuleEngine.getInstance();
 		this._phoneActuationSystem = PhoneActuatingSystem.getInstance();
 		init();
@@ -25,15 +23,15 @@ public class Controller_EQ {
 	}
 
 	/**
-	 * There is an EQ alert but the user says it is wrong.
-	 * We are going to block inference, until the user reinitialize the RE
+	 * There is an EQ alert but the user says it is wrong. We are going to block
+	 * inference, until the user reinitialize the RE
 	 */
 	public void notEQ() {
 		_myRuleEngine.set__inference_blocked(true);
 		_myRuleEngine.initialize();
 		stopAlarm();
 	}
-	
+
 	public void stopAlarm() {
 		_phoneActuationSystem.stopSoundAndVibration();
 	}

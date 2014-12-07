@@ -32,8 +32,6 @@
     <uses-permission android:name="com.samsung.accessory.permission.ACCESSORY_FRAMEWORK" />
     <uses-permission android:name="com.samsung.wmanager.APP" />
     <uses-permission android:name="com.samsung.wmanager.ENABLE_NOTIFICATION" />
-    <uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY" />
-    <uses-permission android:name="com.samsung.WATCH_APP_TYPE.Integrated" />
 
     <application
         android:allowBackup="true"
@@ -91,9 +89,8 @@
 
 
         <!-- GM for gear comm -->
-        <service android:name="com.communication.HelloAccessoryProviderService" >
+        <service android:name="com.communication.SAPServiceProvider" >
         </service>
-
         <receiver android:name="com.samsung.android.sdk.accessory.ServiceConnectionIndicationBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.accessory.service.action.ACCESSORY_SERVICE_CONNECTION_IND" />
@@ -104,10 +101,9 @@
                 <action android:name="android.accessory.device.action.REGISTER_AFTER_INSTALL" />
             </intent-filter>
         </receiver>
-
         <meta-data
             android:name="AccessoryServicesLocation"
-            android:value="/res/xml/accessoryservices.xml" />
+            android:value="/res/xml/sapservices.xml" />
         <meta-data
             android:name="GearAppType"
             android:value="wgt" />

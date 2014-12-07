@@ -7,8 +7,8 @@ public class Controller_Normal {
 	private NormalActivity _myNormal_Activity;
 	private RuleEngine _myRuleEngine;
 
-	public Controller_Normal(NormalActivity normal_Activity ) {
-		this._myNormal_Activity = normal_Activity;	
+	public Controller_Normal(NormalActivity normal_Activity) {
+		this._myNormal_Activity = normal_Activity;
 		this._myRuleEngine = RuleEngine.getInstance();
 		init();
 	}

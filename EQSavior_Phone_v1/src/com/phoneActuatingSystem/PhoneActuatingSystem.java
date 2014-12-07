@@ -1,33 +1,20 @@
 package com.phoneActuatingSystem;
 
-import java.io.IOException;
-
 //import com.example.foremusic.R;
 import com.vars.Constants;
 import com.view.EarthquakeActivity;
 import com.view.MonitorActivity;
 
 import com.ruleengine.R;
-import com.ruleengine.RuleEngine;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
-
-
-
 
 public class PhoneActuatingSystem extends Activity {
 
@@ -37,15 +24,16 @@ public class PhoneActuatingSystem extends Activity {
 
 	// singleton
 	private static PhoneActuatingSystem instance = null;
-	
-	//private OutgoingBroadcastReceiver _outG;
 
+	// private OutgoingBroadcastReceiver _outG;
 
-	//========================timers ================================================
+	// ========================timers
+	// ================================================
 
 	public CountDownTimer timerSoundVibration = new CountDownTimer(15000, 1000) {
 		@Override
-		public void onTick(long millisUntilFinished) {	}
+		public void onTick(long millisUntilFinished) {
+		}
 
 		@Override
 		public void onFinish() {
@@ -55,43 +43,43 @@ public class PhoneActuatingSystem extends Activity {
 
 	public CountDownTimer timerSound = new CountDownTimer(15000, 1000) {
 		@Override
-		public void onTick(long millisUntilFinished) {	}
+		public void onTick(long millisUntilFinished) {
+		}
+
 		@Override
 		public void onFinish() {
 			stopSound();
 		}
 	};
 
-	//========================timers ================================================
+	// ========================timers
+	// ================================================
 
-
-	protected  PhoneActuatingSystem(/*Context context,Controller controller*/ )
-	{ 
+	protected PhoneActuatingSystem(/* Context context,Controller controller */) {
 		mPlayer = new MediaPlayer();
-		//_outG = new OutgoingBroadcastReceiver();
-		//initialize();
-		/*this._context=context;
-		this.__myController = controller;*/
+		// _outG = new OutgoingBroadcastReceiver();
+		// initialize();
+		/*
+		 * this._context=context; this.__myController = controller;
+		 */
 	}
 
 	public static PhoneActuatingSystem getInstance() {
-		if(instance == null) {
+		if (instance == null) {
 			instance = new PhoneActuatingSystem();
 		}
 		return instance;
 	}
 
 	public void setContext(Context context) {
-		this._context=context;
+		this._context = context;
 
 	}
 
-	/*public PhoneActuatingSystem(Context context) {
-		this._context=context;
-		mPlayer = new MediaPlayer();
-	}*/
-
-
+	/*
+	 * public PhoneActuatingSystem(Context context) { this._context=context;
+	 * mPlayer = new MediaPlayer(); }
+	 */
 
 	public void stopSoundAndVibration() {
 		mVibrator.cancel();
@@ -106,72 +94,74 @@ public class PhoneActuatingSystem extends Activity {
 		Log.d("RuleEngine", "stopSound");
 	}
 
+	/*
+	 * --------------------------------------------------------------------------
+	 */
 
-
-	/* -------------------------------------------------------------------------- */
-
-	static final int CALL_FAMILY_REQUEST = 1;  // The request code
+	static final int CALL_FAMILY_REQUEST = 1; // The request code
 
 	/**
 	 * when finished, should unblock inference of RE
 	 */
-	public void callFamily() {		
-		
-		Intent myIntent = new Intent(Intent.ACTION_CALL);
-		myIntent.setData(Uri.parse("tel:"+Constants.phone1));
-		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		//getParent().startActivityForResult(myIntent, CALL_FAMILY_REQUEST);
+	public void callFamily() {
 
-	//	startActivityForResult(myIntent, CALL_FAMILY_REQUEST);
-		
+		Intent myIntent = new Intent(Intent.ACTION_CALL);
+		myIntent.setData(Uri.parse("tel:" + Constants.phone1));
+		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		// getParent().startActivityForResult(myIntent, CALL_FAMILY_REQUEST);
+
+		// startActivityForResult(myIntent, CALL_FAMILY_REQUEST);
+
 		_context.startActivity(myIntent);
 	}
 
-	
-	/* -------------------------------------------------------------------------- */
-
-
+	/*
+	 * --------------------------------------------------------------------------
+	 */
 
 	/**
 	 * when finished, should unblock inference of RE
 	 */
 	public void callEmergency() {
 		Intent myIntent = new Intent(Intent.ACTION_CALL);
-		myIntent.setData(Uri.parse("tel:"+Constants.phone2));
+		myIntent.setData(Uri.parse("tel:" + Constants.phone2));
 		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		_context.startActivity(myIntent);;	    
+		_context.startActivity(myIntent);
+		;
 	}
 
 	/**
 	 * Strong, noisy alarm for danger
 	 */
 	public void normalAlarm() {
-		//Uri alert = Uri.parse("/audio/alarm_buzzer.mp3");
+		// Uri alert = Uri.parse("/audio/alarm_buzzer.mp3");
 		mPlayer = MediaPlayer.create(_context, R.raw.alarmbuzzer);
 
 		mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-		/*try {
-			mPlayer.setDataSource(_context, alert);
-		} catch (IllegalArgumentException e) {
-			Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-		} catch (SecurityException e) {
-			Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-		} catch (IllegalStateException e) {
-			Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
-		/*try {
-			mPlayer.prepare();
-		} catch (IllegalStateException e) {
-			Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-		} catch (IOException e) {
-			Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-		}*/
+		/*
+		 * try { mPlayer.setDataSource(_context, alert); } catch
+		 * (IllegalArgumentException e) {
+		 * Toast.makeText(getApplicationContext(),
+		 * "You might not set the URI correctly!", Toast.LENGTH_LONG).show(); }
+		 * catch (SecurityException e) { Toast.makeText(getApplicationContext(),
+		 * "You might not set the URI correctly!", Toast.LENGTH_LONG).show(); }
+		 * catch (IllegalStateException e) {
+		 * Toast.makeText(getApplicationContext(),
+		 * "You might not set the URI correctly!", Toast.LENGTH_LONG).show(); }
+		 * catch (IOException e) { e.printStackTrace(); }
+		 */
+		/*
+		 * try { mPlayer.prepare(); } catch (IllegalStateException e) {
+		 * Toast.makeText(getApplicationContext(),
+		 * "You might not set the URI correctly!", Toast.LENGTH_LONG).show(); }
+		 * catch (IOException e) { Toast.makeText(getApplicationContext(),
+		 * "You might not set the URI correctly!", Toast.LENGTH_LONG).show(); }
+		 */
 
 		mPlayer.start();
 
-		mVibrator = (Vibrator) _context.getSystemService(Context.VIBRATOR_SERVICE);
+		mVibrator = (Vibrator) _context
+				.getSystemService(Context.VIBRATOR_SERVICE);
 		mVibrator.vibrate(new long[] { 500, 100, 500, 100 }, 0);
 
 		timerSoundVibration.start();
@@ -188,28 +178,30 @@ public class PhoneActuatingSystem extends Activity {
 		mPlayer = MediaPlayer.create(_context, R.raw.sirennoise);
 
 		mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-		/*try {
-			mPlayer.setDataSource(_context, alert);
-		} catch (IllegalArgumentException e) {
-			Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-		} catch (SecurityException e) {
-			Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-		} catch (IllegalStateException e) {
-			Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
-		/*try {
-			mPlayer.prepare();
-		} catch (IllegalStateException e) {
-			Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-		} catch (IOException e) {
-			Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-		}*/
+		/*
+		 * try { mPlayer.setDataSource(_context, alert); } catch
+		 * (IllegalArgumentException e) {
+		 * Toast.makeText(getApplicationContext(),
+		 * "You might not set the URI correctly!", Toast.LENGTH_LONG).show(); }
+		 * catch (SecurityException e) { Toast.makeText(getApplicationContext(),
+		 * "You might not set the URI correctly!", Toast.LENGTH_LONG).show(); }
+		 * catch (IllegalStateException e) {
+		 * Toast.makeText(getApplicationContext(),
+		 * "You might not set the URI correctly!", Toast.LENGTH_LONG).show(); }
+		 * catch (IOException e) { e.printStackTrace(); }
+		 */
+		/*
+		 * try { mPlayer.prepare(); } catch (IllegalStateException e) {
+		 * Toast.makeText(getApplicationContext(),
+		 * "You might not set the URI correctly!", Toast.LENGTH_LONG).show(); }
+		 * catch (IOException e) { Toast.makeText(getApplicationContext(),
+		 * "You might not set the URI correctly!", Toast.LENGTH_LONG).show(); }
+		 */
 
 		mPlayer.start();
 
-		mVibrator = (Vibrator) _context.getSystemService(Context.VIBRATOR_SERVICE);
+		mVibrator = (Vibrator) _context
+				.getSystemService(Context.VIBRATOR_SERVICE);
 		mVibrator.vibrate(new long[] { 100, 500, 100, 500 }, 0);
 
 		timerSoundVibration.start();
@@ -229,15 +221,13 @@ public class PhoneActuatingSystem extends Activity {
 	private void openAlarmScreen() {
 		Intent intent = new Intent(_context, EarthquakeActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		_context.startActivity(intent);  
+		_context.startActivity(intent);
 	}
 
 	public void openNormalScreen() {
 		Intent intent = new Intent(_context, MonitorActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		_context.startActivity(intent);  
+		_context.startActivity(intent);
 	}
-
-
 
 }

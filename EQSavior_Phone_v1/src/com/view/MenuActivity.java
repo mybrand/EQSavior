@@ -1,9 +1,6 @@
 package com.view;
 
 import com.ruleengine.R;
-import com.ruleengine.R.id;
-import com.ruleengine.R.layout;
-import com.ruleengine.R.menu;
 
 import android.support.v7.app.ActionBarActivity;
 import android.content.Context;
@@ -18,12 +15,15 @@ import android.widget.EditText;
 
 //GM : import for server comm
 import android.widget.Toast;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.communication.HelloAccessoryProviderService;
+import com.communication.SAPServiceProvider;
 import com.communication.RegisterApp;
+
 import java.util.concurrent.atomic.AtomicInteger;
+
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.content.pm.PackageInfo;
@@ -80,8 +80,7 @@ public class MenuActivity extends ActionBarActivity {
 			}
 
 			// GM for gear receiver service
-			this.startService(new Intent(this,
-					HelloAccessoryProviderService.class));
+			this.startService(new Intent(this, SAPServiceProvider.class));
 			// GM End
 		}
 	}

@@ -2,10 +2,6 @@ package com.view;
 
 import com.controller.Controller_Normal;
 import com.ruleengine.R;
-import com.ruleengine.R.id;
-import com.ruleengine.R.layout;
-import com.ruleengine.R.menu;
-
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -42,9 +38,8 @@ public class NormalActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void displayInformationToUser(String information)
-	{
-		TextView textView_infoEQ = (TextView) findViewById(R.id.textView_infoEQ);	
+	public void displayInformationToUser(String information) {
+		TextView textView_infoEQ = (TextView) findViewById(R.id.textView_infoEQ);
 		textView_infoEQ.setText(information);
 		textView_infoEQ.refreshDrawableState();
 	}

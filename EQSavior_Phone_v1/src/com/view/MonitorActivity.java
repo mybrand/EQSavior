@@ -2,9 +2,6 @@ package com.view;
 
 import com.controller.Controller;
 import com.ruleengine.R;
-import com.ruleengine.R.id;
-import com.ruleengine.R.layout;
-import com.ruleengine.R.menu;
 import com.vars.Constants;
 
 import android.support.v7.app.ActionBarActivity;
@@ -22,14 +19,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 
-
-public class MonitorActivity extends ActionBarActivity implements OnClickListener {
+public class MonitorActivity extends ActionBarActivity implements
+		OnClickListener {
 
 	private Controller __myController;
 	private String __EQ_Intensity;
-	/*private boolean __falling_Motion;
-	private boolean __alarm_Deactivated;
-	private boolean __timeOut;*/
+	/*
+	 * private boolean __falling_Motion; private boolean __alarm_Deactivated;
+	 * private boolean __timeOut;
+	 */
 	private String __heartBeatStatus; // new
 
 	@Override
@@ -39,7 +37,8 @@ public class MonitorActivity extends ActionBarActivity implements OnClickListene
 
 		// initialize attributes
 		init();
-		// Disable / enable relevant fields and buttons (alarm start not clickable)
+		// Disable / enable relevant fields and buttons (alarm start not
+		// clickable)
 		// add the listeners
 		manageControlsAndListeners();
 	}
@@ -60,10 +59,11 @@ public class MonitorActivity extends ActionBarActivity implements OnClickListene
 	}
 
 	public void initAttributes() {
-		__EQ_Intensity="1";
-		/*__falling_Motion=false;
-		__alarm_Deactivated=false; // from true to false
-		__timeOut=false;*/
+		__EQ_Intensity = "1";
+		/*
+		 * __falling_Motion=false; __alarm_Deactivated=false; // from true to
+		 * false __timeOut=false;
+		 */
 
 		__heartBeatStatus = Constants.heartBeat_status_NORMAL;
 	}
@@ -94,8 +94,8 @@ public class MonitorActivity extends ActionBarActivity implements OnClickListene
 		// button stop not clickable
 		button_STOP.setEnabled(false);
 
-		//access edit field and make it not editable
-		EditText editText_Alarm = (EditText) findViewById(R.id.editText_Alarm);	
+		// access edit field and make it not editable
+		EditText editText_Alarm = (EditText) findViewById(R.id.editText_Alarm);
 		editText_Alarm.setEnabled(false);
 	}
 
@@ -117,8 +117,7 @@ public class MonitorActivity extends ActionBarActivity implements OnClickListene
 		CheckBox checkBox_HeartBeat_HIGH = (CheckBox) findViewById(R.id.checkBox_HB_HIGH);
 		CheckBox checkBox_HeartBeat_LOW = (CheckBox) findViewById(R.id.checkBox_HB_LOW);
 
-		switch(v.getId())
-		{
+		switch (v.getId()) {
 		case R.id.button_Reinitialize:
 			__myController.reinitialize();
 			this.initAttributes();
@@ -127,63 +126,61 @@ public class MonitorActivity extends ActionBarActivity implements OnClickListene
 			blockInference(false);
 			break;
 		case R.id.button_StartReasoning:
-			EditText editText_EQ_Intensity   = (EditText)findViewById(R.id.editText_EQ_Intensity);
+			EditText editText_EQ_Intensity = (EditText) findViewById(R.id.editText_EQ_Intensity);
 
-			if (android.text.TextUtils.isDigitsOnly(editText_EQ_Intensity.getText().toString()))
+			if (android.text.TextUtils.isDigitsOnly(editText_EQ_Intensity
+					.getText().toString()))
 				__EQ_Intensity = editText_EQ_Intensity.getText().toString();
 			else
-				__EQ_Intensity="1";
+				__EQ_Intensity = "1";
 
-			//__myController.SetNewInformationFromUI(__EQ_Intensity,__falling_Motion,__alarm_Deactivated, __timeOut, __heartBeatStatus);
+			// __myController.SetNewInformationFromUI(__EQ_Intensity,__falling_Motion,__alarm_Deactivated,
+			// __timeOut, __heartBeatStatus);
 			__myController.setEQIntensity(Integer.parseInt(__EQ_Intensity));
 			break;
 		case R.id.button_STOP:
 			// not the role of GUI
-			//__alarm_Deactivated=true;
+			// __alarm_Deactivated=true;
 			setAlarm(false); // update GUI
 			__myController.setAlarmDeactivated(); // update RE
 
 			// SHOULD BE DONE BY RE
-			// stop reasoning 
-			//__myController.stopReasoning();
+			// stop reasoning
+			// __myController.stopReasoning();
 			// block reasoning button in GUI
-			//blockInference(true);
+			// blockInference(true);
 			break;
 		case R.id.checkBox_Deactivation:
 			CheckBox checkBox_Deactivation = (CheckBox) findViewById(R.id.checkBox_Deactivation);
-			boolean checkedDea = checkBox_Deactivation.isChecked(); // not __alarmdeactivated!!
+			boolean checkedDea = checkBox_Deactivation.isChecked(); // not
+																	// __alarmdeactivated!!
 
-			//__timeOut = checkBox_Deactivation.isChecked(); // not __alarmdeactivated!!
+			// __timeOut = checkBox_Deactivation.isChecked(); // not
+			// __alarmdeactivated!!
 			__myController.setTimeOut(checkedDea);
 			break;
 		case R.id.checkBox_FallingMotion:
 			CheckBox checkBox_FallingMotion = (CheckBox) findViewById(R.id.checkBox_FallingMotion);
-			//__falling_Motion = checkBox_FallingMotion.isChecked();
+			// __falling_Motion = checkBox_FallingMotion.isChecked();
 			boolean checkedFall = checkBox_FallingMotion.isChecked();
 			__myController.setFallingMotion(checkedFall);
 			break;
 		case R.id.checkBox_HB_LOW:
-			if(checkBox_HeartBeat_LOW.isChecked())
-			{
-				__heartBeatStatus=Constants.heartBeat_status_LOW;
+			if (checkBox_HeartBeat_LOW.isChecked()) {
+				__heartBeatStatus = Constants.heartBeat_status_LOW;
 				checkBox_HeartBeat_HIGH.setEnabled(false);
-			}
-			else
-			{
-				__heartBeatStatus=Constants.heartBeat_status_NORMAL;
+			} else {
+				__heartBeatStatus = Constants.heartBeat_status_NORMAL;
 				checkBox_HeartBeat_HIGH.setEnabled(true);
 			}
 			__myController.setHB(__heartBeatStatus);
 			break;
 		case R.id.checkBox_HB_HIGH:
-			if(checkBox_HeartBeat_HIGH.isChecked())
-			{
-				__heartBeatStatus=Constants.heartBeat_status_HIGH;
+			if (checkBox_HeartBeat_HIGH.isChecked()) {
+				__heartBeatStatus = Constants.heartBeat_status_HIGH;
 				checkBox_HeartBeat_LOW.setEnabled(false);
-			}
-			else
-			{
-				__heartBeatStatus=Constants.heartBeat_status_NORMAL;
+			} else {
+				__heartBeatStatus = Constants.heartBeat_status_NORMAL;
 				checkBox_HeartBeat_LOW.setEnabled(true);
 			}
 			__myController.setHB(__heartBeatStatus);
@@ -194,42 +191,38 @@ public class MonitorActivity extends ActionBarActivity implements OnClickListene
 
 	}
 
-
-	public void blockInference(boolean block)
-	{
-		Button button_StartReasoning = (Button) findViewById(R.id.button_StartReasoning);	
-		if(block)
+	public void blockInference(boolean block) {
+		Button button_StartReasoning = (Button) findViewById(R.id.button_StartReasoning);
+		if (block)
 			button_StartReasoning.setEnabled(false);
 		else
 			button_StartReasoning.setEnabled(true);
 	}
 
-	public void setAlarm(boolean activated)
-	{
-		//Tizen::Graphics::COLOR_ID_RED
-		EditText editText_Alarm = (EditText) findViewById(R.id.editText_Alarm);	
-		Button button_STOP = (Button) findViewById(R.id.button_STOP);	
+	public void setAlarm(boolean activated) {
+		// Tizen::Graphics::COLOR_ID_RED
+		EditText editText_Alarm = (EditText) findViewById(R.id.editText_Alarm);
+		Button button_STOP = (Button) findViewById(R.id.button_STOP);
 
-		if(activated)
-		{
+		if (activated) {
 			editText_Alarm.setText("ALARM ON");
 			editText_Alarm.setEnabled(true);
-			editText_Alarm.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
+			editText_Alarm.getBackground().setColorFilter(Color.RED,
+					PorterDuff.Mode.SRC_ATOP);
 			editText_Alarm.setEnabled(false);
 
-			//editText_Alarm.setColor(EDIT_STATUS_NORMAL,Color::GetColor(COLOR_ID_RED));
-			//editText_Alarm.SetEnabled(false);
+			// editText_Alarm.setColor(EDIT_STATUS_NORMAL,Color::GetColor(COLOR_ID_RED));
+			// editText_Alarm.SetEnabled(false);
 
 			button_STOP.setEnabled(true);
 
-		}
-		else
-		{
+		} else {
 			editText_Alarm.setText("ALARM OFF");
 			editText_Alarm.setEnabled(true);
-			editText_Alarm.getBackground().setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_ATOP);
+			editText_Alarm.getBackground().setColorFilter(Color.GREEN,
+					PorterDuff.Mode.SRC_ATOP);
 			editText_Alarm.setEnabled(false);
-			//editText_Alarm.SetEnabled(false);
+			// editText_Alarm.SetEnabled(false);
 
 			button_STOP.setEnabled(false);
 		}
@@ -237,58 +230,31 @@ public class MonitorActivity extends ActionBarActivity implements OnClickListene
 		button_STOP.refreshDrawableState();
 	}
 
-	public void displayInformationToUser(String information)
-	{
+	public void displayInformationToUser(String information) {
 		// debug in console
-		//AppLog("Invoked with value: %ls", information.GetPointer());
+		// AppLog("Invoked with value: %ls", information.GetPointer());
 
-		EditText editText_Results = (EditText) findViewById(R.id.editText_Results);	
+		EditText editText_Results = (EditText) findViewById(R.id.editText_Results);
 		editText_Results.setText(information);
 		editText_Results.refreshDrawableState();
 	}
 
-	public void displayGPS(String information)
-	{
-		TextView textView_GPS = (TextView) findViewById(R.id.textView_GPS);	
+	public void displayGPS(String information) {
+		TextView textView_GPS = (TextView) findViewById(R.id.textView_GPS);
 		textView_GPS.setText(information);
 		textView_GPS.refreshDrawableState();
 	}
 
-	public void displayBattery(String information)
-	{
-		TextView textView_Battery = (TextView) findViewById(R.id.textView_Battery);	
+	public void displayBattery(String information) {
+		TextView textView_Battery = (TextView) findViewById(R.id.textView_Battery);
 		textView_Battery.setText(information);
 		textView_Battery.refreshDrawableState();
 	}
 
-	public void displayReceivedInformationFromGear(String information)
-	{
-		EditText editText_receiver = (EditText) findViewById(R.id.editText_receiver);	
+	public void displayReceivedInformationFromGear(String information) {
+		EditText editText_receiver = (EditText) findViewById(R.id.editText_receiver);
 		editText_receiver.setText(information);
 		editText_receiver.refreshDrawableState();
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

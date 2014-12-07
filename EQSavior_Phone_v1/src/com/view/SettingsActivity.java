@@ -1,36 +1,30 @@
 package com.view;
 
 import com.ruleengine.R;
-import com.ruleengine.R.id;
-import com.ruleengine.R.layout;
-import com.ruleengine.R.menu;
 import com.vars.Constants;
 
 import android.support.v7.app.ActionBarActivity;
-import android.content.DialogInterface;
 import android.view.View.OnClickListener;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 
-public class SettingsActivity extends ActionBarActivity implements OnClickListener {
+public class SettingsActivity extends ActionBarActivity implements
+		OnClickListener {
 
-
-	EditText editText_Family1 ;
-	EditText editText_Family2 ;
-
+	EditText editText_Family1;
+	EditText editText_Family2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
 
-		editText_Family1 = (EditText)findViewById(R.id.editText_Family1);
-		editText_Family2 = (EditText)findViewById(R.id.editText_Family2);
+		editText_Family1 = (EditText) findViewById(R.id.editText_Family1);
+		editText_Family2 = (EditText) findViewById(R.id.editText_Family2);
 
 		setPhoneNumber1(Constants.phone1);
 		setPhoneNumber2(Constants.phone2);
@@ -58,32 +52,28 @@ public class SettingsActivity extends ActionBarActivity implements OnClickListen
 		return super.onOptionsItemSelected(item);
 	}
 
-
 	@Override
 	public void onClick(View v) {
 
 		String phone1;
 		String phone2;
 
-		switch(v.getId())
-		{
+		switch (v.getId()) {
 		case R.id.button_PhoneNumber:
 			phone1 = editText_Family1.getText().toString();
 			phone2 = editText_Family2.getText().toString();
-			if(android.text.TextUtils.isDigitsOnly(phone1) && android.text.TextUtils.isDigitsOnly(phone2)) 
-			{
+			if (android.text.TextUtils.isDigitsOnly(phone1)
+					&& android.text.TextUtils.isDigitsOnly(phone2)) {
 				Constants.phone1 = phone1;
 				Constants.phone2 = phone2;
-			}
-			else
-			{
+			} else {
 				editText_Family1.setText("wrong format");
 				editText_Family2.setText("wrong format");
 			}
 			break;
 		default:
 			break;
-		}		
+		}
 
 		// back to previous activity
 		this.finish();
@@ -96,8 +86,5 @@ public class SettingsActivity extends ActionBarActivity implements OnClickListen
 	public void setPhoneNumber2(String number) {
 		editText_Family2.setText(number);
 	}
-
-
-
 
 }
