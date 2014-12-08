@@ -38,30 +38,6 @@
     </LinearLayout>
     <!-- pic -->
 
-    <Button
-        android:id="@+id/EQ"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/iv1"
-        android:layout_below="@+id/button_monitor"
-        android:text="Earthquake" />
-
-    <Button
-        android:id="@+id/button_monitor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/iv1"
-        android:layout_below="@+id/iv1"
-        android:text="Monitor" />
-
-    <Button
-        android:id="@+id/Settings"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/iv1"
-        android:layout_toRightOf="@+id/button_monitor"
-        android:text="Settings" />
-
     <ImageView
         android:id="@+id/iv1"
         android:layout_width="fill_parent"
@@ -71,12 +47,30 @@
         android:src="@drawable/wushuiyinpng" />
 
     <Button
-        android:id="@+id/button_noEQ"
+        android:id="@+id/button_Monitor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/iv1"
+        android:layout_alignRight="@+id/iv1"
+        android:layout_below="@+id/iv1"
+        android:text="Monitoring information" />
+
+    <Button
+        android:id="@+id/button_simulation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button_Monitor"
+        android:layout_below="@+id/button_Monitor"
+        android:text="Simulation" />
+
+    <Button
+        android:id="@+id/buttonSettings"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button_monitor"
-        android:layout_below="@+id/button_monitor"
-        android:layout_marginTop="48dp"
-        android:text="No Earthquake" />
+        android:layout_alignBaseline="@+id/button_simulation"
+        android:layout_alignBottom="@+id/button_simulation"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/button_simulation"
+        android:text="Settings" />
 
 </RelativeLayout>

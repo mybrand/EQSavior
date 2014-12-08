@@ -27,6 +27,8 @@ public class SAPServiceProvider extends SAAgent {
 	HashMap<Integer, SAPServiceProviderConnection> connectionMap = null;
 
 	private final IBinder mIBinder = new LocalBinder();
+	
+	private SAPServiceProviderConnection _mySAPSender ;
 
 	public class LocalBinder extends Binder {
 		public SAPServiceProvider getService() {
@@ -38,6 +40,12 @@ public class SAPServiceProvider extends SAAgent {
 	public SAPServiceProvider() {
 		super(TAG, SAPServiceProviderConnection.class);
 		Log.d("SAP PROVIDER", "SERVICE CONSTRUCTOR");
+		// add
+		_mySAPSender = new SAPServiceProviderConnection();
+	}
+	
+	public void sendMessageToGear(String info) {
+		//_mySAPSender.sendMessageToGear(info);
 	}
 
 	public class SAPServiceProviderConnection extends SASocket {
@@ -105,6 +113,34 @@ public class SAPServiceProvider extends SAAgent {
 				connectionMap.remove(mConnectionId);
 			}
 		}
+		
+		/**
+		 * this function sends a message to the gear
+		 * @param str
+		 */
+		/*public void sendMessageToGear(final String str) {
+			final SAPServiceProviderConnection uHandler = connectionMap
+					.get(Integer.parseInt(String.valueOf(mConnectionId)));
+			if (uHandler == null) {
+				Log.e(TAG,
+						"Error, can not get HelloAccessoryProviderConnection handler");
+				return;
+			}
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						uHandler.send(SAP_SERVICE_CHANNEL_ID,
+								str.getBytes());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}).start();
+		}*/
+		
+		
+		
 	}
 
 	@Override
@@ -180,5 +216,7 @@ public class SAPServiceProvider extends SAAgent {
 		Log.d("SAP PROVIDER", "onBIND");
 		return mIBinder;
 	}
+	
+	
 
 }

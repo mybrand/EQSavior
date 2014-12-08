@@ -22,10 +22,12 @@ public class GcmIntentService extends IntentService {
 	NotificationCompat.Builder builder;
 	private String __receivedmsg;
 
+	private CommunicationSystem _myCommunicationSystem;
+	
 	public GcmIntentService() {
 		super("GcmIntentService");
-		// TODO Auto-generated constructor stub
-
+		
+		_myCommunicationSystem = new CommunicationSystem();
 	}
 
 	@Override
@@ -55,19 +57,21 @@ public class GcmIntentService extends IntentService {
 			} else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE
 					.equals(messageType)) {
 				// This loop represents the service doing some work.
-				for (int i = 0; i < 5; i++) {
+				for (int i = 0; i < 2; i++) {
 					Log.i(TAG,
 							"Working... " + (i + 1) + "/5 @ "
 									+ SystemClock.elapsedRealtime());
 					try {
-						Thread.sleep(5000);
+						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 					}
 				}
 				Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
 				// Post notification of received message.
 				__receivedmsg = extras.getString("Notice");
+				///////////////////////// HEREEEEEEEEEEEEEEEEE
 				System.out.println(__receivedmsg);
+				_myCommunicationSystem.receiveInformationFromServer(__receivedmsg);
 				sendNotification(extras.getString("Notice"));
 
 				Log.i(TAG, "Received: " + extras.toString());

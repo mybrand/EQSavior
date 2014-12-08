@@ -27,7 +27,7 @@ public class Controller_EQ {
 	 * inference, until the user reinitialize the RE
 	 */
 	public void notEQ() {
-		_myRuleEngine.set__inference_blocked(true);
+		//_myRuleEngine.set__inference_blocked(true);
 		_myRuleEngine.initialize();
 		stopAlarm();
 	}

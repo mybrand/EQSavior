@@ -3,7 +3,8 @@ package com.ruleengine;
 import android.content.Context;
 import android.util.Log;
 
-import com.controller.Controller;
+import com.controller.Controller_Normal;
+import com.controller.Controller_Simulation;
 import com.phoneActuatingSystem.PhoneActuatingSystem;
 import com.vars.Constants;
 
@@ -12,7 +13,9 @@ public class RuleEngine {
 	// SINGLETON PATTERN
 	private static RuleEngine instance = null;
 
-	private Controller __myController;
+	private Controller_Simulation __myControllerSimulation;
+
+	private Controller_Normal __myControllerNormal;
 
 	/* the actuating system */
 	private PhoneActuatingSystem __myActuatingSystem;
@@ -28,13 +31,13 @@ public class RuleEngine {
 	private boolean __falling_Motion; // user fell down or not
 	private boolean __alarm_Deactivated; // user deactivated the alarm
 	private String __heartBeat; // the heart beat rate of the user - low, normal
-								// or high
+	// or high
 	private String __phoneBattery; // the status of the phone battery - low or
-									// normal
+	// normal
 	private String __gearBattery; // the status of the gear battery - low or
-									// normal
+	// normal
 	private boolean __timeToAnswer_OUT; // the alarm has been started, but the
-										// user didn't turn it off
+	// user didn't turn it off
 
 	// about calling
 	private boolean __no_answer_from_Family;
@@ -47,20 +50,20 @@ public class RuleEngine {
 	// facts that are used not to start twice a new action - whether or not we
 	// already took a decision
 	private boolean __alarmStarted; // was the alarm already started by the rule
-									// engine?
+	// engine?
 	private boolean __emergencyCalled; // was the emergency already called?
 	private boolean __familyCalled; // was the family already called?
 	private boolean __phoneBattery_Managed; // was the low battery of the phone
-											// managed already?
+	// managed already?
 	private boolean __gearBattery_Managed; // was the low battery of the gear
-											// managed already?
+	// managed already?
 
 	/**
 	 * Constructor, set default values controller and actuating systems have to
 	 * be set separately (using setters)
 	 */
 	protected RuleEngine(/* Context context,Controller controller */) {
-		// initialize();
+		initialize();
 		/*
 		 * this._context=context; this.__myController = controller;
 		 */
@@ -76,8 +79,8 @@ public class RuleEngine {
 	// ---------------------- Setters ------------------ \\
 
 	/* set the controller this engine is associated with */
-	public void setController(Controller __myController) {
-		this.__myController = __myController;
+	public void setController(Controller_Simulation __myController) {
+		this.__myControllerSimulation = __myController;
 	}
 
 	// set context
@@ -88,11 +91,13 @@ public class RuleEngine {
 	/* updating the rule engine with new facts */
 	public void setEQ_Intensity(int __EQ_Intensity) {
 		this.__EQ_Intensity = __EQ_Intensity;
+		updateNormalDisplay();
 		Reason();
 	}
 
 	public void setFalling_Motion(boolean __falling_Motion) {
 		this.__falling_Motion = __falling_Motion;
+		updateNormalDisplay();
 		Reason();
 	}
 
@@ -103,16 +108,19 @@ public class RuleEngine {
 
 	public void setHeartBeat(String __heartBeat) {
 		this.__heartBeat = __heartBeat;
+		updateNormalDisplay();
 		Reason();
 	}
 
 	public void setPhoneBattery(String __phoneBattery) {
 		this.__phoneBattery = __phoneBattery;
+		updateNormalDisplay();
 		Reason();
 	}
 
 	public void setGearBattery(String __gearBattery) {
 		this.__gearBattery = __gearBattery;
+		updateNormalDisplay();
 		Reason();
 	}
 
@@ -139,18 +147,22 @@ public class RuleEngine {
 	/* update of internal facts */
 	public void setDanger(boolean __danger) {
 		this.__danger = __danger;
+		updateNormalDisplay();
 	}
 
 	public void setAlarmStarted(boolean __alarmStarted) {
 		this.__alarmStarted = __alarmStarted;
+		updateNormalDisplay();
 	}
 
 	public void setEmergencyCalled(boolean __emergencyCalled) {
 		this.__emergencyCalled = __emergencyCalled;
+		updateNormalDisplay();
 	}
 
 	public void setFamilyCalled(boolean __familyCalled) {
 		this.__familyCalled = __familyCalled;
+		updateNormalDisplay();
 	}
 
 	public void set__inference_blocked(boolean __inference_blocked) {
@@ -161,7 +173,7 @@ public class RuleEngine {
 		this.__alarm_Deactivated = true;
 		this.__alarmStarted = false;
 		this.set__inference_blocked(true);
-		__myController.blockInference();
+		__myControllerSimulation.blockInference();
 	}
 
 	/**
@@ -267,10 +279,12 @@ public class RuleEngine {
 
 	private void managerGearBattery() {
 		__phoneBattery_Managed = true;
+		__myActuatingSystem.manageGearBattery();
 	}
 
 	private void managePhoneBattery() {
 		__phoneBattery_Managed = true;
+		__myActuatingSystem.managePhoneBattery();
 	}
 
 	/**
@@ -279,7 +293,7 @@ public class RuleEngine {
 	 */
 	void blockInference() {
 		this.__inference_blocked = true;
-		__myController.blockInference();
+		__myControllerSimulation.blockInference();
 	}
 
 	// to update, the function so far just block the GUI, such function should
@@ -292,6 +306,8 @@ public class RuleEngine {
 		__alarmStarted = true;
 		__alarm_Deactivated = false;
 		// activate the alarm here
+		Log.d("RuleEngine", "context status in RE: "+_context);
+
 		__myActuatingSystem.normalAlarm();
 	}
 
@@ -333,9 +349,12 @@ public class RuleEngine {
 		String str = getFactsInformation();
 		// update for alarm ---------------------- NOT THE RE JOB / TO BE
 		// CHANGED TO ACTUATING SYSTEM
-		__myController.setAlarm(__alarmStarted);
-		// display information
-		__myController.displayInformation(str);
+		if(__myControllerSimulation != null) 
+		{
+			__myControllerSimulation.setAlarm(__alarmStarted);
+			// display information
+			__myControllerSimulation.displayInformation(str);
+		}
 	}
 
 	public String getFactsInformation() {
@@ -346,8 +365,8 @@ public class RuleEngine {
 		str += __EQ_Intensity;
 		str += ", falling: " + __falling_Motion;
 		str += ", HeartBeat: " + __heartBeat;
-		str += ", alarm deactivation: " + __alarm_Deactivated;
-		str += "\n time for answering the alarm is out: " + __timeToAnswer_OUT;
+		//str += ", alarm deactivation: " + __alarm_Deactivated;
+		//str += "\n time for answering the alarm is out: " + __timeToAnswer_OUT;
 		str += "\n ------ Inferred facts ------";
 		str += "\ndanger: " + __danger;
 		str += ", severeDanger: " + __severeDanger;
@@ -381,7 +400,7 @@ public class RuleEngine {
 		// actuating system
 		// __myActuatingSystem = new PhoneActuatingSystem(_context);
 		__myActuatingSystem = PhoneActuatingSystem.getInstance();
-		__myActuatingSystem.setContext(_context);
+		//__myActuatingSystem.setContext(_context);
 
 		// blocking inference
 		__inference_blocked = false;
@@ -408,6 +427,19 @@ public class RuleEngine {
 
 		__phoneBattery_Managed = false;
 		__gearBattery_Managed = false;
+	}
+
+	public void setNormalController(Controller_Normal controller_Normal) {
+		__myControllerNormal = controller_Normal;		
+	}
+
+	/**
+	 * whenever there is a change in the status informations, it is updated in the normal GUI
+	 */
+	public void updateNormalDisplay() {
+		String info = getFactsInformation();
+		if(__myControllerNormal != null)
+			__myControllerNormal.setNewFacts(info);
 	}
 
 }

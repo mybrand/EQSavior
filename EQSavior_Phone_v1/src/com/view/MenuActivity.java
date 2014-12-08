@@ -21,6 +21,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.communication.SAPServiceProvider;
 import com.communication.RegisterApp;
+import com.controller.Controller_Menu;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -31,29 +32,37 @@ import android.content.pm.PackageManager.NameNotFoundException;
 
 public class MenuActivity extends ActionBarActivity {
 
-	Button button;
-	Button EQ;
-	Button noEQ;
-	Button button_monitor;
+	private Button buttonSettings;
+	//private Button buttonEQ;
+	//private Button button_noEQ;
+	private Button button_simulation;
+	private Button button_Monitor;
 
-	final Context context = this;
-	EditText editText;
-	Intent intent;
+	private Context _context;
+	private EditText editText;
+	private Intent intent;
+
+	private Controller_Menu _myController;
+	
 	// GM : Variable for server comm
 	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 	public static final String EXTRA_MESSAGE = "message";
 	public static final String PROPERTY_REG_ID = "registration_id";
 	private static final String PROPERTY_APP_VERSION = "appVersion";
 	private static final String TAG = "GCMRelated";
-	GoogleCloudMessaging gcm;
-	AtomicInteger msgId = new AtomicInteger();
-	String regid;
+	private GoogleCloudMessaging gcm;
+	private AtomicInteger msgId = new AtomicInteger();
+	private String regid;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu);
-
+		// create all the necessary classes in the controller 
+		_context= getBaseContext();
+		_myController = new Controller_Menu(_context);
+		
+		
 		addListenerOnButton();
 
 		// GM for device ID register
@@ -87,7 +96,7 @@ public class MenuActivity extends ActionBarActivity {
 
 	private String getRegistrationId(Context applicationContext) {
 		// GM for device ID register
-		final SharedPreferences prefs = getGCMPreferences(context);
+		final SharedPreferences prefs = getGCMPreferences(_context);
 		String registrationId = prefs.getString(PROPERTY_REG_ID, "");
 		if (registrationId.isEmpty()) {
 			Log.i(TAG, "Registration not found.");
@@ -109,8 +118,8 @@ public class MenuActivity extends ActionBarActivity {
 	private int getAppVersion(Context applicationContext) {
 		// GM for device ID register
 		try {
-			PackageInfo packageInfo = context.getPackageManager()
-					.getPackageInfo(context.getPackageName(), 0);
+			PackageInfo packageInfo = _context.getPackageManager()
+					.getPackageInfo(_context.getPackageName(), 0);
 			return packageInfo.versionCode;
 		} catch (NameNotFoundException e) {
 			// should never happen
@@ -142,44 +151,55 @@ public class MenuActivity extends ActionBarActivity {
 	}
 
 	public void addListenerOnButton() {
-		button = (Button) findViewById(R.id.Settings);
-		noEQ = (Button) findViewById(R.id.button_noEQ);
-		EQ = (Button) findViewById(R.id.EQ);
-		button_monitor = (Button) findViewById(R.id.button_monitor);
+		buttonSettings = (Button) findViewById(R.id.buttonSettings);		
+		button_simulation = (Button) findViewById(R.id.button_simulation);
+		button_Monitor = (Button) findViewById(R.id.button_Monitor);	
+		
+		//buttonEQ = (Button) findViewById(R.id.buttonEQ);
+		//button_noEQ = (Button) findViewById(R.id.button_noEQ);
 
-		button_monitor.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				intent = new Intent(context, MonitorActivity.class);
-				startActivity(intent);
-			}
-		});
-
-		button.setOnClickListener(new OnClickListener() {
+		buttonSettings.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 
-				intent = new Intent(context, SettingsActivity.class);
+				intent = new Intent(_context, SettingsActivity.class);
 
 				startActivity(intent);
 			}
 		});
-
-		EQ.setOnClickListener(new OnClickListener() {
+		
+		button_simulation.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				intent = new Intent(context, EarthquakeActivity.class);
+				intent = new Intent(_context, SimulationActivity.class);
 				startActivity(intent);
 			}
 		});
 
-		noEQ.setOnClickListener(new OnClickListener() {
+		button_Monitor.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				intent = new Intent(context, NormalActivity.class);
+				intent = new Intent(_context, NormalActivity.class);
 				startActivity(intent);
 			}
 		});
+
+		
+		/*buttonEQ.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				intent = new Intent(_context, EarthquakeActivity.class);
+				startActivity(intent);
+			}
+		});
+
+		button_noEQ.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				intent = new Intent(_context, NormalActivity.class);
+				startActivity(intent);
+			}
+		});*/
 	}
 
 	@Override

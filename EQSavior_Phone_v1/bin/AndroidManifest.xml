@@ -12,6 +12,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     
     <!-- GM for server msg -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -51,7 +53,7 @@
         <uses-library android:name="android.test.runner" />
 
         <activity
-            android:name="com.view.MonitorActivity"
+            android:name="com.view.SimulationActivity"
             android:label="@string/app_name" >
         </activity>
         <activity

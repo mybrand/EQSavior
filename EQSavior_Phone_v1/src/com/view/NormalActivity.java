@@ -6,17 +6,25 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 
-public class NormalActivity extends ActionBarActivity {
+public class NormalActivity extends ActionBarActivity implements
+OnClickListener  {
 
-	public Controller_Normal _myController;
+	private Controller_Normal _myController;
+	private Button button_ManualEQ;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_normal);
 		_myController = new Controller_Normal(this);
+		button_ManualEQ = (Button) findViewById(R.id.button_ManualEQ);
+		button_ManualEQ.setOnClickListener(this);
+
 	}
 
 	@Override
@@ -25,6 +33,9 @@ public class NormalActivity extends ActionBarActivity {
 		getMenuInflater().inflate(R.menu.normal, menu);
 		return true;
 	}
+	
+	
+	//button_ManualEQ
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -42,5 +53,16 @@ public class NormalActivity extends ActionBarActivity {
 		TextView textView_infoEQ = (TextView) findViewById(R.id.textView_infoEQ);
 		textView_infoEQ.setText(information);
 		textView_infoEQ.refreshDrawableState();
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.button_ManualEQ:
+			_myController.manualEQ();
+			break;
+		default:
+			break;
+		}		
 	}
 }

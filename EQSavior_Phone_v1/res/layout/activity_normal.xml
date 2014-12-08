@@ -15,14 +15,16 @@
         android:background="#d3d3d3"
         android:text="@string/hello_world"
         android:textSize="10pt" />
+
      <ImageView
-        android:id="@+id/iv1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_alignRight="@+id/textView2"
-        android:layout_below="@+id/textView1"
-        android:src="@drawable/normal1" />
+         android:id="@+id/iv1"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:layout_above="@+id/tableLayout1"
+         android:layout_alignLeft="@+id/textView1"
+         android:layout_alignRight="@+id/textView2"
+         android:layout_below="@+id/textView1"
+         android:src="@drawable/normal1" />
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -65,33 +67,12 @@
         </TableRow>
     </TableLayout>
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tableLayout1"
-        android:layout_alignLeft="@+id/tableLayout1"
-        android:layout_marginLeft="18dp"
-        android:text=":" 
-         android:textSize="8pt"/>
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tableLayout1"
-        android:layout_below="@+id/iv1"
-        android:background="#d3d3d3"
-        android:text="No Earthquake!"
-        android:gravity="center"
-        android:textSize="10pt" />
-
       <TextView
           android:id="@+id/textView_infoEQ"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/textView2"
-          android:layout_marginTop="24dp"
+          android:layout_above="@+id/button_ManualEQ"
+          android:layout_below="@+id/tableLayout1"
           android:layout_toLeftOf="@+id/linearLayout1"
           android:background="#d3d3d3"
           android:gravity="center"
@@ -101,15 +82,25 @@
       <!--#dcdcdc  -->
 
       <Button
-          android:id="@+id/normal"
+          android:id="@+id/button_ManualEQ"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content"
-          android:layout_alignLeft="@+id/textView_infoEQ"
-          android:layout_below="@+id/textView_infoEQ"
-          android:gravity="center"
+          android:layout_alignParentBottom="true"
+          android:layout_toLeftOf="@+id/linearLayout1"
           android:background="#000000"
-          android:textColor="#ffffff"
-          android:layout_marginTop="20dp"
-          android:text="Are you suffering earthquake now?" />
+          android:gravity="center"
+          android:text="Are you suffering earthquake now?"
+          android:textColor="#ffffff" />
+
+      <TextView
+          android:id="@+id/textView2"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_alignLeft="@+id/tableLayout1"
+          android:layout_below="@+id/iv1"
+          android:background="#d3d3d3"
+          android:gravity="center"
+          android:text="No Earthquake!"
+          android:textSize="10pt" />
 
 </RelativeLayout>

@@ -1,7 +1,8 @@
 package com.SensingSystem;
 
-import com.controller.Controller;
+import com.controller.Controller_Simulation;
 import com.ruleengine.RuleEngine;
+import com.vars.Constants;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,19 +27,20 @@ public class SensingSystem implements LocationListener {
 	private LocationManager locationManager;
 
 	private RuleEngine _ruleEngine; // to init
-	private Controller _controller;
+	//private Controller _controller;
 
 	private Context _context;
 
-	public SensingSystem(Controller controller, Context context) {
+	public SensingSystem(/*Controller controller,*/ Context context) {
 		this._context = context;
-		this._controller = controller;
+		//this._controller = controller;
+		this._ruleEngine = RuleEngine.getInstance();
 		initBatterySensing();
 		initGPSSensing();
 	}
 
 	// ----------------BEGINNING BATTERY --------------- \\\\\\\\\\
-	private void initBatterySensing() {
+	public void initBatterySensing() {
 		// create a broadcast receiver to receive data in real-time
 		batteryLevel = new BroadcastReceiver() {
 			@Override
@@ -53,13 +55,13 @@ public class SensingSystem implements LocationListener {
 				}
 
 				// if we want to update some view, we do it here
-				_controller.displayBattery(level + "%");
+				//_controller.displayBattery(level + "%");
 
 				// classifier
-				if (level < 10) // low battery - this threshold is selected by
-								// us
+				if (level < 10) // low battery - this threshold is selected by us
 				{
 					// update rule engine with low battery
+					_ruleEngine.setPhoneBattery(Constants.battery_Phone_status_LOW);
 				}
 			}
 		};
@@ -84,7 +86,7 @@ public class SensingSystem implements LocationListener {
 	// Example:
 	// http://androidexample.com/GPS_Basic__-__Android_Example/index.php?view=article_discription&aid=68&aaid=93
 
-	private void initGPSSensing() {
+	public void initGPSSensing() {
 		// create the location manager
 		locationManager = (LocationManager) _context
 				.getSystemService(Context.LOCATION_SERVICE);
@@ -101,7 +103,7 @@ public class SensingSystem implements LocationListener {
 		String str = "Lat. " + location.getLatitude() + " ; Long. "
 				+ location.getLongitude();
 		// if we want to update some view, we do it here
-		_controller.displayGPS(str);
+		//_controller.displayGPS(str);
 	}
 
 	@Override
