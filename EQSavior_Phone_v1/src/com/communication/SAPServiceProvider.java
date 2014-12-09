@@ -83,8 +83,12 @@ public class SAPServiceProvider extends SAAgent {
 			message = strToUpdateUI.concat(timeStr);
 
 			Log.d("SAP MESSAGE", message);
+			
+			Toast.makeText(getBaseContext(),
+	                new String(message), Toast.LENGTH_LONG)
+	                .show();		
 
-			final SAPServiceProviderConnection uHandler = connectionMap
+			/*final SAPServiceProviderConnection uHandler = connectionMap
 					.get(Integer.parseInt(String.valueOf(mConnectionId)));
 			if (uHandler == null) {
 				Log.e(TAG,
@@ -101,7 +105,30 @@ public class SAPServiceProvider extends SAAgent {
 						e.printStackTrace();
 					}
 				}
+			}).start();*/
+			
+			sendNotification(message);
+		}
+		
+		public void sendNotification(final String notification) {
+			
+			final SAPServiceProviderConnection uHandler = connectionMap.get(Integer.parseInt(String.valueOf(mConnectionId)));// SAPServiceProviderConnection.get(mConnectionId);
+						
+			if(uHandler == null){
+					Log.e(TAG,"Error, can not get handler");
+					return;
+				}
+				
+			new Thread(new Runnable() {
+				public void run() {
+					try {
+						uHandler.send(SAP_SERVICE_CHANNEL_ID, notification.getBytes());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}).start();
+		
 		}
 
 		@Override
