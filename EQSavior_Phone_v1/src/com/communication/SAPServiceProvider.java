@@ -3,7 +3,10 @@ package com.communication;
 import java.io.IOException;
 import java.util.HashMap;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
 import android.text.format.Time;
@@ -18,6 +21,8 @@ import com.samsung.android.sdk.accessory.SASocket;
 
 public class SAPServiceProvider extends SAAgent {
 
+	private CommunicationSystem _myCommunicationSystem;
+	
 	public static final String TAG = "SAPServiceProvider";
 
 	public final static int SERVICE_CONNECTION_RESULT_OK = 0;
@@ -27,7 +32,7 @@ public class SAPServiceProvider extends SAAgent {
 	HashMap<Integer, SAPServiceProviderConnection> connectionMap = null;
 
 	private final IBinder mIBinder = new LocalBinder();
-	
+
 	private SAPServiceProviderConnection _mySAPSender ;
 
 	public class LocalBinder extends Binder {
@@ -43,7 +48,7 @@ public class SAPServiceProvider extends SAAgent {
 		// add
 		_mySAPSender = new SAPServiceProviderConnection();
 	}
-	
+
 	public void sendMessageToGear(String info) {
 		//_mySAPSender.sendMessageToGear(info);
 	}
@@ -69,24 +74,27 @@ public class SAPServiceProvider extends SAAgent {
 		public void onReceive(int channelId, byte[] data) {
 			Log.d(TAG, "onReceive");
 
-			final String message;
 
-			Time time = new Time();
+			// registering the BroadcastReceiver here ensures you, that the Gear connection has been already established
+			GearDataReceiver gearDataReceiver = new GearDataReceiver();
+			IntentFilter intentFilter = new IntentFilter("myData");
+			registerReceiver(gearDataReceiver, intentFilter);
 
-			time.set(System.currentTimeMillis());
 
-			String timeStr = " " + String.valueOf(time.minute) + ":"
-					+ String.valueOf(time.second);
-
-			String strToUpdateUI = new String(data);
-
-			message = strToUpdateUI.concat(timeStr);
-
+			////////////
+			String message = new String(data);
 			Log.d("SAP MESSAGE", message);
-			
+
 			Toast.makeText(getBaseContext(),
-	                new String(message), Toast.LENGTH_LONG)
-	                .show();		
+					new String(message), Toast.LENGTH_LONG)
+					.show();		
+			
+			_myCommunicationSystem.ReceiveInformationFromGear(message);
+			/////////////////
+
+
+
+
 
 			/*final SAPServiceProviderConnection uHandler = connectionMap
 					.get(Integer.parseInt(String.valueOf(mConnectionId)));
@@ -106,19 +114,19 @@ public class SAPServiceProvider extends SAAgent {
 					}
 				}
 			}).start();*/
-			
-			sendNotification(message);
+
+			sendNotification("FROM PHONE: "+message);
 		}
-		
+
 		public void sendNotification(final String notification) {
-			
+
 			final SAPServiceProviderConnection uHandler = connectionMap.get(Integer.parseInt(String.valueOf(mConnectionId)));// SAPServiceProviderConnection.get(mConnectionId);
-						
+
 			if(uHandler == null){
-					Log.e(TAG,"Error, can not get handler");
-					return;
-				}
-				
+				Log.e(TAG,"Error, can not get handler");
+				return;
+			}
+
 			new Thread(new Runnable() {
 				public void run() {
 					try {
@@ -128,7 +136,7 @@ public class SAPServiceProvider extends SAAgent {
 					}
 				}
 			}).start();
-		
+
 		}
 
 		@Override
@@ -140,7 +148,7 @@ public class SAPServiceProvider extends SAAgent {
 				connectionMap.remove(mConnectionId);
 			}
 		}
-		
+
 		/**
 		 * this function sends a message to the gear
 		 * @param str
@@ -165,14 +173,34 @@ public class SAPServiceProvider extends SAAgent {
 				}
 			}).start();
 		}*/
-		
-		
-		
+
+
+
+	}
+
+	// code below goes to the outer class, which extends SAAgent
+	private class GearDataReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (intent.getAction().equals("myData")) {
+				String data = intent.getStringExtra("data");
+				notifyGear(data); 
+			}			
+		}
+	}
+
+	public void notifyGear(String notification) {
+		for(SAPServiceProviderConnection provider : connectionMap.values()) {
+			provider.sendNotification(notification);
+		}
 	}
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		
+		_myCommunicationSystem = CommunicationSystem.getInstance();
+		
 		Log.i(TAG, "onCreate of smart view Provider Service");
 
 		SA mAccessory = new SA();
@@ -243,7 +271,7 @@ public class SAPServiceProvider extends SAAgent {
 		Log.d("SAP PROVIDER", "onBIND");
 		return mIBinder;
 	}
-	
-	
+
+
 
 }

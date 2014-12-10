@@ -127,4 +127,12 @@
         android:layout_toRightOf="@+id/tableLayout1"
         android:ems="10" />
 
+    <Button
+        android:id="@+id/button_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_PhoneNumber"
+        android:layout_centerHorizontal="true"
+        android:text="Test mess to gear" />
+
 </RelativeLayout>

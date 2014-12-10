@@ -50,9 +50,14 @@ OnClickListener  {
 	}
 
 	public void displayInformationToUser(String information) {
-		TextView textView_infoEQ = (TextView) findViewById(R.id.textView_infoEQ);
-		textView_infoEQ.setText(information);
-		textView_infoEQ.refreshDrawableState();
+		try {
+			TextView textView_infoEQ = (TextView) findViewById(R.id.textView_infoEQ);
+			textView_infoEQ.setText(information);
+			textView_infoEQ.refreshDrawableState();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

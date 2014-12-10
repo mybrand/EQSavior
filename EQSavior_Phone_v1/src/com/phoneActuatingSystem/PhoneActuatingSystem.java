@@ -87,7 +87,7 @@ public class PhoneActuatingSystem extends Activity {
 
 		//To be notified of changes of the phone state create an instance
 		//of the TelephonyManager class and the StatePhoneReceiver class
-		
+
 
 	}
 
@@ -101,12 +101,12 @@ public class PhoneActuatingSystem extends Activity {
 	public void setContext(Context context) {
 		this._context = context;
 	}
-	
+
 	public void setCommunicationSystem() {
 		_myCommunicationSystem = CommunicationSystem.getInstance();
-
+		_myCommunicationSystem.setContext(_context);
 	}
-	
+
 	public void init() {
 		myPhoneStateListener = new StatePhoneReceiver(_context);
 		manager = ((TelephonyManager) _context.getSystemService(Context.TELEPHONY_SERVICE));
@@ -118,16 +118,19 @@ public class PhoneActuatingSystem extends Activity {
 	 */
 
 	public void stopSoundAndVibration() {
-		mVibrator.cancel();
-		mPlayer.stop();
-		timerSoundVibration.cancel();
+		if(mVibrator != null)
+			mVibrator.cancel();
+		if(mPlayer != null)
+			mPlayer.stop();
+		if(timerSoundVibration != null)
+			timerSoundVibration.cancel();
 		Log.d("RuleEngine", "stopSoundAndVibration");
 	}
 
 	public void stopSound() {
 		mPlayer.stop();
 		timerSound.cancel();
-		_myCommunicationSystem.sendInformationToGear("hello this is francois' message");
+		//_myCommunicationSystem.sendInformationToGear("hello this is francois' message");
 		Log.d("RuleEngine", "stopSound");
 	}
 
@@ -171,7 +174,7 @@ public class PhoneActuatingSystem extends Activity {
 	public void callEmergency() {
 
 		stopSoundAndVibration();
-		
+
 		////
 		manager.listen(myPhoneStateListener,
 				PhoneStateListener.LISTEN_CALL_STATE); // start listening to the phone changes
@@ -191,6 +194,9 @@ public class PhoneActuatingSystem extends Activity {
 		// Uri alert = Uri.parse("/audio/alarm_buzzer.mp3");
 
 		Log.d("RuleEngine", "context status in ACTUATING: "+_context);
+		
+		_myCommunicationSystem.sendInformationToGear("alert");
+
 
 		mPlayer = MediaPlayer.create(_context, R.raw.alarmbuzzer);
 
@@ -232,6 +238,9 @@ public class PhoneActuatingSystem extends Activity {
 	 */
 	public void severeAlarm() {
 
+		_myCommunicationSystem.sendInformationToGear("alert");
+
+		
 		mPlayer = MediaPlayer.create(_context, R.raw.sirennoise);
 
 		mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -296,55 +305,55 @@ public class PhoneActuatingSystem extends Activity {
 		// TODO Auto-generated method stub
 
 	}
-	
-	 // Monitor for changes to the state of the phone
-	 public class StatePhoneReceiver extends PhoneStateListener {
-	     Context context;
-	     public StatePhoneReceiver(Context context) {
-	         this.context = context;
-	     }
-	 
-	     @Override
-	     public void onCallStateChanged(int state, String incomingNumber) {
-	         super.onCallStateChanged(state, incomingNumber);
-	         
-	         switch (state) {
-	         
-	         case TelephonyManager.CALL_STATE_OFFHOOK: //Call is established
-	          if (callFromApp) {
-	              callFromApp=false;
-	              callFromOffHook=true;
-	                   
-	              try {
-	                Thread.sleep(500); // Delay 0,5 seconds to handle better turning on loudspeaker
-	              } catch (InterruptedException e) {
-	              }
-	           
-	              //Activate loudspeaker
-	              AudioManager audioManager = (AudioManager)
-	                                          _context.getSystemService(Context.AUDIO_SERVICE);
-	              audioManager.setMode(AudioManager.MODE_IN_CALL);
-	              audioManager.setSpeakerphoneOn(true);
-	           }
-	           break;
-	         
-	        case TelephonyManager.CALL_STATE_IDLE: //Call is finished
-	          if (callFromOffHook) {
-	                callFromOffHook=false;
-	                AudioManager audioManager = (AudioManager) _context.getSystemService(Context.AUDIO_SERVICE);
-	                audioManager.setMode(AudioManager.MODE_NORMAL); //Deactivate loudspeaker
-	                manager.listen(myPhoneStateListener, // Remove listener
-	                      PhoneStateListener.LISTEN_NONE);
-	             }
-	          break;
-	         }
-	     }
-	 }
+
+	// Monitor for changes to the state of the phone
+	public class StatePhoneReceiver extends PhoneStateListener {
+		Context context;
+		public StatePhoneReceiver(Context context) {
+			this.context = context;
+		}
+
+		@Override
+		public void onCallStateChanged(int state, String incomingNumber) {
+			super.onCallStateChanged(state, incomingNumber);
+
+			switch (state) {
+
+			case TelephonyManager.CALL_STATE_OFFHOOK: //Call is established
+			if (callFromApp) {
+				callFromApp=false;
+				callFromOffHook=true;
+
+				try {
+					Thread.sleep(500); // Delay 0,5 seconds to handle better turning on loudspeaker
+				} catch (InterruptedException e) {
+				}
+
+				//Activate loudspeaker
+				AudioManager audioManager = (AudioManager)
+						_context.getSystemService(Context.AUDIO_SERVICE);
+				audioManager.setMode(AudioManager.MODE_IN_CALL);
+				audioManager.setSpeakerphoneOn(true);
+			}
+			break;
+
+			case TelephonyManager.CALL_STATE_IDLE: //Call is finished
+				if (callFromOffHook) {
+					callFromOffHook=false;
+					AudioManager audioManager = (AudioManager) _context.getSystemService(Context.AUDIO_SERVICE);
+					audioManager.setMode(AudioManager.MODE_NORMAL); //Deactivate loudspeaker
+					manager.listen(myPhoneStateListener, // Remove listener
+							PhoneStateListener.LISTEN_NONE);
+				}
+				break;
+			}
+		}
+	}
 
 	public void setRuleEngine(RuleEngine _myRuleEngine) {
 		this._myRuleEngine = _myRuleEngine;
 	}
-	 
-	 
+
+
 
 }

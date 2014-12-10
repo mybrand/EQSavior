@@ -3,7 +3,9 @@ package com.view;
 import com.controller.Controller_EQ;
 import com.ruleengine.R;
 import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,11 +61,12 @@ public class EarthquakeActivity extends ActionBarActivity implements
 		switch (v.getId()) {
 		case R.id.button_noEQ:
 			_myController.notEQ();
+			sendInformationToGear("NOQ");
 			this.finish();
 			break;
 		case R.id.button_StopAlarm:
 			_myController.stopAlarm();
-
+			sendInformationToGear("stop");
 			/*
 			 * Intent myIntent = new Intent(Intent.ACTION_CALL);
 			 * myIntent.setData(Uri.parse("tel:"+Constants.phone1));
@@ -77,6 +80,18 @@ public class EarthquakeActivity extends ActionBarActivity implements
 			break;
 		}
 	}
+	
+	
+	public void sendInformationToGear(String str) {
+		Log.d("Communication", "Message sent from Phone to gear: " + str);
+		// here, use the SAP provider
+		//_mySAPprovider.sendMessageToGear(str);
+		Intent intent = new Intent("myData");
+		intent.putExtra("data", str);
+		sendBroadcast(intent);
+
+	}
+	
 
 	/*
 	 * @Override protected void onActivityResult(int requestCode, int

@@ -4,6 +4,8 @@ import com.phoneActuatingSystem.PhoneActuatingSystem;
 import com.ruleengine.RuleEngine;
 import com.vars.Constants;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 public class CommunicationSystem {
@@ -14,7 +16,9 @@ public class CommunicationSystem {
 	private static CommunicationSystem instance = null;
 
 	PhoneActuatingSystem _myPhoneActuationSystem;
-	
+
+	private Context _context;
+
 	//private SAPServiceProvider _mySAPprovider;
 
 	protected CommunicationSystem() {
@@ -32,7 +36,11 @@ public class CommunicationSystem {
 		}
 		return instance;
 	}
-	
+
+	public void setContext(Context c) {
+		this._context = c;
+	}
+
 	/**
 	 * This function sends information from the phone to the gear
 	 * @param str: the information that is sent.
@@ -46,8 +54,12 @@ public class CommunicationSystem {
 	 */
 	public void sendInformationToGear(String str) {
 		Log.d("Communication", "Message sent from Phone to gear: " + str);
-			// here, use the SAP provider
+		// here, use the SAP provider
 		//_mySAPprovider.sendMessageToGear(str);
+		Intent intent = new Intent("myData");
+		intent.putExtra("data", str);
+		_context.sendBroadcast(intent);
+
 	}
 
 	/**
@@ -91,6 +103,11 @@ public class CommunicationSystem {
 		case "manual_EQ": // the user says there is an EQ happening on the gear
 			Log.d("Communication", "Message received " + str);
 			_ruleEngine.setEQ_Intensity(6);
+			break;
+		case "falling_motion": // the user says there is an EQ happening on the gear
+			Log.d("Communication", "Message received " + str);
+			
+			_ruleEngine.setFalling_Motion(true);
 			break;
 		default:
 			Log.d("Communication", "message unknown from gear" + str);
@@ -162,7 +179,7 @@ public class CommunicationSystem {
 		content = info;
 		sendInformationToGear(header + ";" + content);
 	}
-	
+
 	// not used, could be if battery low
 	public void tellStopReasoning() {
 		header = "stop";

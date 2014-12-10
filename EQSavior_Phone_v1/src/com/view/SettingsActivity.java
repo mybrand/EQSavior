@@ -4,7 +4,9 @@ import com.ruleengine.R;
 import com.vars.Constants;
 
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View.OnClickListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +33,14 @@ public class SettingsActivity extends ActionBarActivity implements
 
 		Button button_PhoneNumber = (Button) findViewById(R.id.button_PhoneNumber);
 		button_PhoneNumber.setOnClickListener(this);
+		
+		//debug
+		Button button_test = (Button) findViewById(R.id.button_test);
+		button_test.setOnClickListener(this);
+		
+		//button_test.setEnabled(false);
+		
+
 	}
 
 	@Override
@@ -70,15 +80,26 @@ public class SettingsActivity extends ActionBarActivity implements
 				editText_Family1.setText("wrong format");
 				editText_Family2.setText("wrong format");
 			}
+			// back to previous activity
+			this.finish();
+			break;
+		case R.id.button_test:
+			sendInformationToGear("hello it is francois");
 			break;
 		default:
 			break;
-		}
-
-		// back to previous activity
-		this.finish();
+		}		
 	}
+	
+	public void sendInformationToGear(String str) {
+		Log.d("Communication", "Message sent from Phone to gear: " + str);
+		// here, use the SAP provider
+		//_mySAPprovider.sendMessageToGear(str);
+		Intent intent = new Intent("myData");
+		intent.putExtra("data", str);
+		sendBroadcast(intent);
 
+	}
 	public void setPhoneNumber1(String number) {
 		editText_Family1.setText(number);
 	}

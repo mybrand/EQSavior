@@ -36,8 +36,8 @@ public class Controller_Simulation {
 		this._context = context;
 		// __ruleEngine = new RuleEngine(_context, this);
 		__ruleEngine = RuleEngine.getInstance(); // Initialization is done here,
-													// because first
-													// instantiation
+		// because first
+		// instantiation
 		__ruleEngine.setController(this);
 		__ruleEngine.setContext(_context);
 		//__ruleEngine.initialize();
@@ -90,7 +90,13 @@ public class Controller_Simulation {
 	}
 
 	public void setAlarm(boolean activated) {
-		__simulationInterface.setAlarm(activated);
+		
+		try {
+			__simulationInterface.setAlarm(activated);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void setAlarmDeactivated() {
@@ -119,7 +125,8 @@ public class Controller_Simulation {
 	}
 
 	public void blockInference() {
-		__simulationInterface.blockInference(true);
+		if(__simulationInterface != null)
+			__simulationInterface.blockInference(true);
 	}
 
 	public void displayGPS(String information) {

@@ -186,14 +186,14 @@ public class RuleEngine {
 		// if we are not blocking the inference
 		if (!__inference_blocked) {
 			// infer danger level
-			if (__EQ_Intensity >= 2)
+			if (__EQ_Intensity > 2 && __EQ_Intensity < 6)
 				__danger = true;
-			if (__EQ_Intensity >= 4)
+			if (__EQ_Intensity >= 6)
 				__severeDanger = true;
-			if (__EQ_Intensity < 4) {
+			if (__EQ_Intensity < 6) {
 				__severeDanger = false;
 			}
-			if (__EQ_Intensity < 2) {
+			if (__EQ_Intensity <= 2) {
 				__danger = false;
 				__severeDanger = false;
 			}

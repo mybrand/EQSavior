@@ -192,11 +192,16 @@ public class SimulationActivity extends ActionBarActivity implements
 	}
 
 	public void blockInference(boolean block) {
-		Button button_StartReasoning = (Button) findViewById(R.id.button_StartReasoning);
-		if (block)
-			button_StartReasoning.setEnabled(false);
-		else
-			button_StartReasoning.setEnabled(true);
+		try {
+			Button button_StartReasoning = (Button) findViewById(R.id.button_StartReasoning);
+			if (block)
+				button_StartReasoning.setEnabled(false);
+			else
+				button_StartReasoning.setEnabled(true);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void setAlarm(boolean activated) {
@@ -234,9 +239,14 @@ public class SimulationActivity extends ActionBarActivity implements
 		// debug in console
 		// AppLog("Invoked with value: %ls", information.GetPointer());
 
-		EditText editText_Results = (EditText) findViewById(R.id.editText_Results);
-		editText_Results.setText(information);
-		editText_Results.refreshDrawableState();
+		try {
+			EditText editText_Results = (EditText) findViewById(R.id.editText_Results);
+			editText_Results.setText(information);
+			editText_Results.refreshDrawableState();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void displayGPS(String information) {
